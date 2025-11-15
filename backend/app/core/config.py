@@ -1,5 +1,5 @@
 from functools import lru_cache
-from typing import List
+from typing import List, Optional, Union
 
 from pydantic import AnyHttpUrl, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     JWT_REFRESH_SECRET_KEY: str = "change-me-too"
     JWT_ALGORITHM: str = "HS256"
 
-    CORS_ORIGINS: List[AnyHttpUrl] | List[str] = [
+    CORS_ORIGINS: Union[List[AnyHttpUrl], List[str]] = [
         "http://localhost",
         "http://localhost:5173",
         "http://127.0.0.1",
@@ -31,11 +31,11 @@ class Settings(BaseSettings):
     ]
 
     LOG_LEVEL: str = "INFO"
-    SENTRY_DSN: str | None = None
+    SENTRY_DSN: Optional[str] = None
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
-    def assemble_cors_origins(cls, value: str | List[str]) -> List[str]:
+    def assemble_cors_origins(cls, value: Union[str, List[str]]) -> List[str]:
         if isinstance(value, str):
             return [origin.strip() for origin in value.split(",")]
         return value

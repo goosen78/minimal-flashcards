@@ -31,7 +31,11 @@
       "Bash(nul)",
       "Bash(Get-ChildItem -Path backend -Recurse -Filter __pycache__)",
       "Bash(Remove-Item -Recurse -Force)",
-      "Bash(netstat:*)"
+      "Bash(netstat:*)",
+      "Bash(npm install:*)",
+      "Bash(docker start:*)",
+      "Bash(docker run:*)",
+      "Bash(postgres:15-alpine)"
     ],
     "deny": [],
     "ask": []

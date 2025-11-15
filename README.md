@@ -26,7 +26,7 @@ A modern, minimalist flashcard application built with React and FastAPI. Create 
 ### Backend
 - **FastAPI** (Python) for REST API
 - **SQLModel** for ORM and database models
-- **SQLite** for database
+- **PostgreSQL** for database
 - **Pydantic** for data validation
 - **Uvicorn** as ASGI server
 
@@ -35,7 +35,8 @@ A modern, minimalist flashcard application built with React and FastAPI. Create 
 ### Prerequisites
 
 - **Node.js** (v18 or higher)
-- **Python** (v3.11 or higher)
+- **Python** (v3.9 or higher)
+- **PostgreSQL** (v15 or higher) or **Docker**
 - **npm** or **yarn**
 
 ### Backend Setup
@@ -61,7 +62,45 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Run the backend server:
+4. **Set up environment variables:**
+```bash
+cp .env.example .env
+```
+Edit `.env` and update:
+- `DATABASE_URL`: PostgreSQL connection string
+- `JWT_SECRET_KEY` and `JWT_REFRESH_SECRET_KEY`: Change these in production!
+
+5. **Set up PostgreSQL:**
+
+**Option A: Using Docker (Recommended for Development)**
+```bash
+docker run -d \
+  --name flashdecks-postgres \
+  -e POSTGRES_USER=flashdecks \
+  -e POSTGRES_PASSWORD=flashdecks \
+  -e POSTGRES_DB=flashdecks \
+  -p 5432:5432 \
+  postgres:15-alpine
+```
+
+**Option B: Local PostgreSQL Installation**
+```bash
+# macOS with Homebrew
+brew install postgresql@15
+brew services start postgresql@15
+
+# Create database and user
+createdb flashdecks
+psql flashdecks -c "CREATE USER flashdecks WITH PASSWORD 'flashdecks';"
+psql flashdecks -c "GRANT ALL PRIVILEGES ON DATABASE flashdecks TO flashdecks;"
+```
+
+6. Run database migrations:
+```bash
+alembic upgrade head
+```
+
+7. Run the backend server:
 ```bash
 uvicorn app.main:app --reload --port 8000
 ```
@@ -152,10 +191,10 @@ flashcards-app-minimal/
 ## Development Notes
 
 ### Database
-- The application uses SQLite as the database
-- Database file is automatically created on first run
-- Location: `backend/flashdecks.db`
-- To reset the database, simply delete the file and restart the backend
+- The application uses PostgreSQL as the database
+- Make sure PostgreSQL is running before starting the backend
+- Database schema is managed through Alembic migrations
+- To reset the database, drop and recreate it, then run migrations again
 
 ### Default User
 - Email: `student@flashdecks.com`
