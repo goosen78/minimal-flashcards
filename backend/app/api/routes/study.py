@@ -66,8 +66,6 @@ def get_session_cards(
             "prompt": card.prompt,
             "answer": card.answer,
             "explanation": card.explanation,
-            "options": card.options,
-            "cloze_data": card.cloze_data,
             "created_at": card.created_at.isoformat() if card.created_at else None,
             "updated_at": card.updated_at.isoformat() if card.updated_at else None,
         })

@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from pydantic import ConfigDict
-from sqlalchemy import ARRAY, JSON, Column, DateTime, Enum, Text, func
+from sqlalchemy import Column, DateTime, Enum, Text, func
 from sqlmodel import Field, Relationship, SQLModel
 
 from .enums import CardType
@@ -26,14 +26,6 @@ class Card(SQLModel, table=True):
     prompt: str = Field(sa_column=Column(Text, nullable=False))
     answer: str = Field(sa_column=Column(Text, nullable=False))
     explanation: Optional[str] = Field(default=None, sa_column=Column(Text, nullable=True))
-    options: Optional[list[str]] = Field(
-        default=None,
-        sa_column=Column(JSON, nullable=True),
-    )
-    cloze_data: Optional[dict] = Field(
-        default=None,
-        sa_column=Column(JSON, nullable=True),
-    )
 
     created_at: datetime = Field(
         sa_column=Column(

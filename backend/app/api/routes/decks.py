@@ -54,8 +54,6 @@ def read_deck(
                 prompt=card.prompt,
                 answer=card.answer,
                 explanation=card.explanation,
-                options=card.options,
-                cloze_data=card.cloze_data,
                 created_at=card.created_at,
                 updated_at=card.updated_at,
             )
@@ -89,8 +87,6 @@ def create_deck(
                 prompt=card.prompt,
                 answer=card.answer,
                 explanation=card.explanation,
-                options=card.options,
-                cloze_data=card.cloze_data,
                 created_at=card.created_at,
                 updated_at=card.updated_at,
             )
@@ -128,8 +124,6 @@ def update_deck(
                 prompt=card.prompt,
                 answer=card.answer,
                 explanation=card.explanation,
-                options=card.options,
-                cloze_data=card.cloze_data,
                 created_at=card.created_at,
                 updated_at=card.updated_at,
             )
@@ -170,7 +164,6 @@ def add_card(
         prompt=card.prompt,
         answer=card.answer,
         explanation=card.explanation,
-        options=card.options,
         created_at=card.created_at,
         updated_at=card.updated_at,
     )
@@ -197,14 +190,14 @@ def edit_card(
         prompt=card.prompt,
         answer=card.answer,
         explanation=card.explanation,
-        options=card.options,
         created_at=card.created_at,
         updated_at=card.updated_at,
     )
 
 
-@router.delete("/cards/{card_id}", response_model=Message)
+@router.delete("/{deck_id}/cards/{card_id}", response_model=Message)
 def remove_card(
+    deck_id: int,
     card_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
@@ -212,6 +205,8 @@ def remove_card(
     card = db.get(Card, card_id)
     if not card:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Card not found")
+    if card.deck_id != deck_id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Card does not belong to this deck")
     deck = deck_service.get_deck_by_id(db, card.deck_id)
     if current_user.role != UserRole.ADMIN and deck.owner_user_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
