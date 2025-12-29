@@ -153,12 +153,6 @@ def _prepare_card_payload(card_in: CardCreate | CardUpdate) -> dict:
         else:
             normalized_type = CardType(str(type_value).lower()).value
         data["type"] = normalized_type
-    else:
-        normalized_type = None
-
-    # Simplified: Only basic cards, no options needed
-    data["options"] = None
-    data["cloze_data"] = None
     return data
 
 

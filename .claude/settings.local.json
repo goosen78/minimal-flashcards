@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --version:*)",
+      "Bash(npm:*)",
+      "Bash(docker:*)",
+      "Bash(python3:*)",
+      "Bash(source .venv/bin/activate)",
+      "Bash(pip install:*)",
+      "Bash(test:*)",
+      "Bash(alembic upgrade:*)",
+      "Bash(PYTHONPATH=. alembic upgrade:*)",
+      "Bash(timeout 10 uvicorn:*)",
+      "Bash(curl:*)",
+      "Bash(pkill:*)",
+      "Bash(PYTHONPATH=. alembic revision:*)",
+      "Bash(cat:*)",
+      "Bash(python:*)",
+      "Bash(lsof:*)"
+    ]
+  }
+}
