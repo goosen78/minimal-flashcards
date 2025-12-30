@@ -204,15 +204,15 @@ class TestEditCard:
 
 @pytest.mark.integration
 class TestRemoveCard:
-    """Test DELETE /api/v1/decks/cards/{card_id} endpoint."""
+    """Test DELETE /api/v1/decks/{deck_id}/cards/{card_id} endpoint."""
 
-    def test_remove_card(self, client: TestClient, test_cards):
+    def test_remove_card(self, client: TestClient, test_deck, test_cards):
         """Test removing a card."""
         card = test_cards[0]
-        response = client.delete(f"/api/v1/decks/cards/{card.id}")
+        response = client.delete(f"/api/v1/decks/{test_deck.id}/cards/{card.id}")
         assert response.status_code == 200
 
-    def test_remove_nonexistent_card(self, client: TestClient):
+    def test_remove_nonexistent_card(self, client: TestClient, test_deck):
         """Test removing a non-existent card returns 404."""
-        response = client.delete("/api/v1/decks/cards/999999")
+        response = client.delete(f"/api/v1/decks/{test_deck.id}/cards/999999")
         assert response.status_code == 404
