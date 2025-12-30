@@ -126,36 +126,25 @@ def private_deck_fixture(db: Session, test_user: User) -> Deck:
 
 @pytest.fixture(name="test_cards")
 def test_cards_fixture(db: Session, test_deck: Deck) -> list[Card]:
-    """Create test cards of various types."""
+    """Create test cards (basic type only in minimal version)."""
     cards = [
         Card(
             deck_id=test_deck.id,
-            type=CardType.MULTIPLE_CHOICE,
+            type=CardType.BASIC,
             prompt="What is 2 + 2?",
             answer="4",
-            options=["2", "3", "4", "5"],
-            explanation="Basic arithmetic",
         ),
         Card(
             deck_id=test_deck.id,
-            type=CardType.SHORT_ANSWER,
+            type=CardType.BASIC,
             prompt="What is the capital of France?",
             answer="Paris",
-            explanation="Paris is the capital city of France",
-        ),
-        Card(
-            deck_id=test_deck.id,
-            type=CardType.CLOZE,
-            prompt="The capital of France is [...]",
-            answer="Paris",
-            cloze_data={"blanks": [{"answer": "Paris"}]},
         ),
         Card(
             deck_id=test_deck.id,
             type=CardType.BASIC,
             prompt="What is Python?",
             answer="A programming language",
-            explanation="Python is a high-level programming language",
         ),
     ]
     for card in cards:
